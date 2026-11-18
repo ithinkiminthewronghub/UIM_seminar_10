@@ -130,10 +130,12 @@ class Step(Activation):
         """
         # assert  Ověřte, že x je typu np.ndarray
         # assert  Ověřte, že vystup obsahuje jen hodnoty 0.0 a 1.0
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) implementujte f(x) = 1 pro x >= 0, "
-            "jinak 0, vektorizovane pomoci np.where."
-        )
+        assert isinstance(x, np.ndarray)
+        result = np.where(x>=0, 1.0, 0.0)
+        assert np.isin(result, [0.0, 1.0]).all()
+
+        return result
+
 
     def derivative(self, x: np.ndarray) -> np.ndarray:
         """Vrati derivaci skokove aktivace (NOVE v Cviceni 10).
@@ -158,11 +160,8 @@ class Step(Activation):
             Nulove pole stejneho tvaru jako `x` (typ float).
         """
         # assert  Ověřte, že x je typu np.ndarray
-        raise NotImplementedError(
-            "Úkol: vratte nulove pole stejneho tvaru jako x (np.zeros_like "
-            "s dtype float) - derivace skoku je vsude nulova, v bode 0 "
-            "konvencne take 0."
-        )
+        assert isinstance(x, np.ndarray)
+        return np.zeros_like(x)
 
     @property
     def output_range(self) -> tuple[float, float]:
@@ -174,10 +173,10 @@ class Step(Activation):
             Konstantni dvojice `(0.0, 1.0)`.
         """
         # assert  Ověřte, že vracite tuple dvou float hodnot, ne list ani int
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) vratte konstantni tuple (0.0, 1.0) "
-            "jako obor hodnot Step aktivace."
-        )
+        result = (0.0, 1.0)
+        assert isinstance(result, tuple) and isinstance(result[0], float) and isinstance(result[1], float)
+
+        return result
 
 
 class Sigmoid(Activation):
@@ -216,12 +215,10 @@ class Sigmoid(Activation):
         np.ndarray
             Pole stejneho tvaru jako `x` s hodnotami v otevrenem intervalu (0.0, 1.0).
         """
-        # assert  Ověřte, že x je typu np.ndarray
-        # assert  Ověřte, že self.temperature je kladne cislo
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) implementujte f(x) = 1 / (1 + exp(-x / "
-            "self.temperature)) pomoci np.exp, vektorizovane pres cele pole x."
-        )
+        assert isinstance(x, np.ndarray)
+        assert self.temperature > 0.0
+
+        return 1.0 / (1 + np.exp(-x / self.temperature))
 
     def derivative(self, x: np.ndarray) -> np.ndarray:
         """Vrati derivaci sigmoidy s teplotou (NOVE v Cviceni 10).
@@ -249,10 +246,11 @@ class Sigmoid(Activation):
         """
         # assert  Ověřte, že x je typu np.ndarray
         # assert  Ověřte, že self.temperature je kladne cislo
-        raise NotImplementedError(
-            "Úkol: spocitejte s = self.forward(x) a vratte "
-            "(1.0 / self.temperature) * s * (1.0 - s)."
-        )
+        assert isinstance(x, np.ndarray)
+        assert self.temperature > 0.0
+
+        s = self.forward(x)
+        return (1.0/self.temperature) * s * (1 - s)
 
     @property
     def output_range(self) -> tuple[float, float]:
@@ -264,10 +262,10 @@ class Sigmoid(Activation):
             Konstantni dvojice `(0.0, 1.0)`.
         """
         # assert  Ověřte, že vracite tuple dvou float hodnot, ne list ani int
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) vratte konstantni tuple (0.0, 1.0) "
-            "jako obor hodnot Sigmoid aktivace."
-        )
+        result = (0.0, 1.0)
+        assert isinstance(result, tuple) and isinstance(result[0], float) and isinstance(result[1], float)
+
+        return result
 
 
 class Tanh(Activation):
@@ -295,10 +293,8 @@ class Tanh(Activation):
             Pole stejneho tvaru jako `x` s hodnotami v otevrenem intervalu (-1.0, 1.0).
         """
         # assert  Ověřte, že x je typu np.ndarray
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) implementujte f(x) = tanh(x) pomoci "
-            "np.tanh, vektorizovane pres cele pole x."
-        )
+        assert isinstance(x, np.ndarray)
+        return np.tanh(x)
 
     def derivative(self, x: np.ndarray) -> np.ndarray:
         """Vrati derivaci hyperbolickeho tangens (NOVE v Cviceni 10).
@@ -321,9 +317,8 @@ class Tanh(Activation):
             Pole stejneho tvaru jako `x` s hodnotami v intervalu (0.0, 1.0].
         """
         # assert  Ověřte, že x je typu np.ndarray
-        raise NotImplementedError(
-            "Úkol: spocitejte t = self.forward(x) a vratte 1.0 - t**2."
-        )
+        assert isinstance(x, np.ndarray)
+        return 1.0 - np.tanh(x)**2
 
     @property
     def output_range(self) -> tuple[float, float]:
@@ -335,10 +330,10 @@ class Tanh(Activation):
             Konstantni dvojice `(-1.0, 1.0)`.
         """
         # assert  Ověřte, že vracite tuple dvou float hodnot, ne list ani int
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) vratte konstantni tuple (-1.0, 1.0) "
-            "jako obor hodnot Tanh aktivace."
-        )
+        result = (-1.0, 1.0)
+        assert isinstance(result, tuple) and isinstance(result[0], float) and isinstance(result[1], float)
+
+        return result
 
 
 class ReLU(Activation):
@@ -367,10 +362,8 @@ class ReLU(Activation):
             Pole stejneho tvaru jako `x` s hodnotami v intervalu [0.0, +inf).
         """
         # assert  Ověřte, že x je typu np.ndarray
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) implementujte f(x) = max(0, x) pomoci "
-            "np.maximum, vektorizovane pres cele pole x."
-        )
+        assert isinstance(x, np.ndarray)
+        return np.maximum(0, x)
 
     def derivative(self, x: np.ndarray) -> np.ndarray:
         """Vrati derivaci ReLU (NOVE v Cviceni 10).
@@ -393,10 +386,9 @@ class ReLU(Activation):
             Pole stejneho tvaru jako `x` s hodnotami z mnoziny {0.0, 1.0}.
         """
         # assert  Ověřte, že x je typu np.ndarray
-        raise NotImplementedError(
-            "Úkol: vratte 1.0 tam, kde x > 0, jinak 0.0 (napr. "
-            "(x > 0).astype(float)); v bode x = 0 konvencne 0."
-        )
+        assert isinstance(x, np.ndarray)
+        return (x>0).astype(float)
+
 
     @property
     def output_range(self) -> tuple[float, float]:
@@ -408,10 +400,10 @@ class ReLU(Activation):
             Konstantni dvojice `(0.0, np.inf)`.
         """
         # assert  Ověřte, že horni mez je +nekonecno (np.inf), ne konecne cislo
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) vratte konstantni tuple (0.0, np.inf) "
-            "jako obor hodnot ReLU aktivace."
-        )
+        result = (0.0, np.inf)
+        assert result[1] == np.inf
+
+        return result
 
 
 class ReLU6(Activation):
@@ -439,10 +431,8 @@ class ReLU6(Activation):
             Pole stejneho tvaru jako `x` s hodnotami v intervalu [0.0, 6.0].
         """
         # assert  Ověřte, že x je typu np.ndarray
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) implementujte f(x) = min(max(0, x), 6) "
-            "pomoci np.clip, vektorizovane pres cele pole x."
-        )
+        assert isinstance(x, np.ndarray)
+        return np.clip(np.maximum(0.0, x), 0.0, 6.0)
 
     def derivative(self, x: np.ndarray) -> np.ndarray:
         """Vrati derivaci ReLU6 (NOVE v Cviceni 10).
@@ -464,10 +454,8 @@ class ReLU6(Activation):
             Pole stejneho tvaru jako `x` s hodnotami z mnoziny {0.0, 1.0}.
         """
         # assert  Ověřte, že x je typu np.ndarray
-        raise NotImplementedError(
-            "Úkol: vratte 1.0 tam, kde 0 < x < 6, jinak 0.0 (napr. "
-            "((x > 0) & (x < 6)).astype(float))."
-        )
+        assert isinstance(x, np.ndarray)
+        return((x>0) & (x < 6)).astype(float)
 
     @property
     def output_range(self) -> tuple[float, float]:
@@ -479,10 +467,10 @@ class ReLU6(Activation):
             Konstantni dvojice `(0.0, 6.0)`.
         """
         # assert  Ověřte, že vracite tuple dvou float hodnot, ne list ani int
-        raise NotImplementedError(
-            "Úkol: (brana z Cviceni 09) vratte konstantni tuple (0.0, 6.0) "
-            "jako obor hodnot ReLU6 aktivace."
-        )
+        result = (0.0, 6.0)
+        assert isinstance(result, tuple) and isinstance(result[0], float) and isinstance(result[1], float)
+
+        return result
 
 
 # Registr jmen aktivaci na tridy - podklad pro `make_activation` nize.
